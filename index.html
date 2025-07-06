@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>অফিস সহকারী প্রার্থী তালিকা</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #2d6a4f;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    .form-group {
+      position: relative;
+    }
+    .form-group label {
+      position: absolute;
+      left: 10px;
+      top: -10px;
+      background-color: white;
+      padding: 0 4px;
+      font-size: 13px;
+      color: #555;
+    }
+    .card {
+      background-color: white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      position: relative;
+    }
+    .card img {
+      width: 120px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .info {
+      flex: 1;
+    }
+    .info p {
+      margin: 4px 0;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: crimson;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    form {
+      display: none;
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    form button {
+      padding: 10px 20px;
+      background-color: #2d6a4f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .toggle-btn {
+      margin-bottom: 10px;
+      padding: 8px 16px;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    অফিস সহকারী পদের আগ্রহীদের প্রার্থী তালিকা
+  </header>
+
+  <div class="container">
+    <button class="toggle-btn" onclick="toggleForm()">📋 এন্ট্রি ফর্ম চালু/বন্ধ</button>
+    <form id="applicantForm">
+      <div class="form-group">
+        <label for="name">নাম</label>
+        <input type="text" id="name" required>
+      </div>
+      <div class="form-group">
+        <label for="address">ঠিকানা</label>
+        <input type="text" id="address" required>
+      </div>
+      <div class="form-group">
+        <label for="education">পড়ালেখা</label>
+        <input type="text" id="education" required>
+      </div>
+      <div class="form-group">
+        <label for="age">বয়স</label>
+        <input type="number" id="age" required>
+      </div>
+      <div class="form-group">
+        <label for="height">উচ্চতা</label>
+        <input type="text" id="height">
+      </div>
+      <div class="form-group">
+        <label for="weight">ওজন</label>
+        <input type="text" id="weight">
+      </div>
+      <div class="form-group">
+        <label for="location">ইচ্ছুক কর্মস্থল</label>
+        <input type="text" id="location">
+      </div>
+      <div class="form-group">
+        <label for="fatherOccupation">বাবার পেশা</label>
+        <input type="text" id="fatherOccupation">
+      </div>
+      <div class="form-group">
+        <label for="mobile">মোবাইল নম্বর</label>
+        <input type="text" id="mobile">
+      </div>
+      <div class="form-group">
+        <label for="reference">রেফারেন্স</label>
+        <input type="text" id="reference">
+      </div>
+      <div class="form-group">
+        <label for="photoUrl">ছবির লিংক</label>
+        <input type="text" id="photoUrl">
+      </div>
+      <button type="submit">প্রার্থী যোগ করুন</button>
+    </form>
+
+    <div id="applicantList" class="container">
+      <!-- নতুন প্রার্থীদের তালিকা এখানে যুক্ত হবে -->
+    </div>
+  </div>
+
+  <script>
+    function toggleForm() {
+      const form = document.getElementById('applicantForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedApplicants = JSON.parse(localStorage.getItem('applicants')) || [];
+      savedApplicants.forEach((applicant, index) => renderApplicant(applicant, index));
+    });
+
+    document.getElementById('applicantForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const applicant = {
+        name: document.getElementById('name').value,
+        address: document.getElementById('address').value,
+        education: document.getElementById('education').value,
+        age: document.getElementById('age').value,
+        height: document.getElementById('height').value,
+        weight: document.getElementById('weight').value,
+        location: document.getElementById('location').value,
+        fatherOccupation: document.getElementById('fatherOccupation').value,
+        mobile: document.getElementById('mobile').value,
+        reference: document.getElementById('reference').value,
+        photoUrl: document.getElementById('photoUrl').value
+      };
+
+      const applicants = JSON.parse(localStorage.getItem('applicants')) || [];
+      applicants.push(applicant);
+      localStorage.setItem('applicants', JSON.stringify(applicants));
+
+      renderApplicant(applicant, applicants.length - 1);
+      this.reset();
+    });
+
+    function renderApplicant(data, index) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${data.photoUrl}" alt="প্রার্থীর ছবি">
+        <div class="info">
+          <p><strong>নাম:</strong> ${data.name}</p>
+          <p><strong>ঠিকানা:</strong> ${data.address}</p>
+          <p><strong>পড়ালেখা:</strong> ${data.education}</p>
+          <p><strong>বয়স:</strong> ${data.age} বছর</p>
+          <p><strong>উচ্চতা:</strong> ${data.height}</p>
+          <p><strong>ওজন:</strong> ${data.weight}</p>
+          <p><strong>ইচ্ছুক কর্মস্থল:</strong> ${data.location}</p>
+          <p><strong>বাবার পেশা:</strong> ${data.fatherOccupation}</p>
+          <p><strong>মোবাইল:</strong> ${data.mobile}</p>
+          <p><strong>রেফারেন্স:</strong> ${data.reference}</p>
+        </div>
+        <button class="delete-btn" onclick="deleteApplicant(${index})">বাদ দিন</button>
+        <button class="delete-btn" style="top: 45px; background-color: darkorange;" onclick="editApplicant(${index})">✏️ এডিট</button>
+      `;
+      document.getElementById('applicantList').appendChild(card);
+    }
+
+    function deleteApplicant(index) {
+      let applicants = JSON.parse(localStorage.getItem('applicants')) || [];
+      applicants.splice(index, 1);
+      localStorage.setItem('applicants', JSON.stringify(applicants));
+      location.reload();
+    }
+
+    function editApplicant(index) {
+      const applicants = JSON.parse(localStorage.getItem('applicants')) || [];
+      const applicant = applicants[index];
+      document.getElementById('name').value = applicant.name;
+      document.getElementById('address').value = applicant.address;
+      document.getElementById('education').value = applicant.education;
+      document.getElementById('age').value = applicant.age;
+      document.getElementById('height').value = applicant.height;
+      document.getElementById('weight').value = applicant.weight;
+      document.getElementById('location').value = applicant.location;
+      document.getElementById('fatherOccupation').value = applicant.fatherOccupation;
+      document.getElementById('mobile').value = applicant.mobile;
+      document.getElementById('reference').value = applicant.reference;
+      document.getElementById('photoUrl').value = applicant.photoUrl;
+      deleteApplicant(index);
+      document.getElementById('applicantForm').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
